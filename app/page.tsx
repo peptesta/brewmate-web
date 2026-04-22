@@ -1,5 +1,4 @@
 "use client";
-import { trendingBeers, feedReviews } from "./lib/mockData";
 
 export default function Home() {
   return (
