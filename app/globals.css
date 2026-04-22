@@ -46,3 +46,46 @@ body {
     scroll-snap-align: start;
   }
 }
+
+.video-background {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* Copre tutta l'altezza dello schermo */
+  overflow: hidden;
+}
+
+.video-background video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+  object-fit: cover; /* Mantiene le proporzioni tagliando i bordi */
+  z-index: -1;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(
+    0,
+    0,
+    0,
+    0.4
+  ); /* Scurisce il video per far risaltare il testo */
+  z-index: 0;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: white;
+}

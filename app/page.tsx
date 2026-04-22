@@ -1,35 +1,54 @@
 "use client";
-import Link from "next/link";
 import { trendingBeers, feedReviews } from "./lib/mockData";
-import TrendingBeersSection from "./sections/TrendingBeers";
-import NearbyReviewsSection from "./sections/NearbyReviews";
 
 export default function Home() {
-  // Aggiungi distanza e tempo alle recensioni (opzionale)
-  const reviewsWithMeta = feedReviews.map((review, index) => ({
-    ...review,
-    id: review.id.toString(),
-    beerId: review.beerId.toString(),
-    distance: `${(Math.random() * 5 + 0.5).toFixed(1)} km`,
-    timeAgo: ["2 ore fa", "ieri", "3 ore fa", "5 ore fa", "1 ora fa"][
-      index % 5
-    ],
-  }));
-
   return (
-    <div className="min-h-screen bg-white">
-      <main className="max-w-md mx-auto pb-20 overscroll-none">
-        {/* Sezione Birre di Tendenza */}
-        <TrendingBeersSection
-          beers={trendingBeers.map((beer) => ({
-            ...beer,
-            id: beer.id.toString(),
-          }))}
-        />
+    <main className="relative min-h-screen bg-brew-gold">
+      {/* SECTION VIDEO: Sticky */}
+      <div className="relative h-screen w-full">
+        <div className="sticky top-0 h-screen w-full overflow-hidden">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            <source src="/video/bg_good_idea.mp4" type="video/mp4" />
+          </video>
 
-        {/* Sezione Recensioni Vicino a Te */}
-        <NearbyReviewsSection reviews={reviewsWithMeta} />
-      </main>
-    </div>
+          {/* LAYER 1: Overlay scuro generale per contrasto */}
+          <div className="absolute inset-0 bg-black/10 pointer-events-none" />
+
+          {/* LAYER 2: L'EFFETTO BLUR PROGRESSIVO */}
+          {/* Questo div sfoca ciò che sta sotto (il video) nella parte finale */}
+          <div className="absolute bottom-0 left-0 w-full h-[40vh] backdrop-blur-md [mask-image:linear-gradient(to_bottom,transparent,black_60%)] pointer-events-none" />
+
+          {/* LAYER 3: IL GRADIENTE COLORE (copre il blur e lo unisce al gold) */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_65%,#FFBF00_100%)] pointer-events-none" />
+        </div>
+      </div>
+
+      {/* CONTENT LAYER */}
+      <div className="relative z-20 -mt-[35vh]">
+        {/* Hero Content */}
+        <section className="h-[60vh] flex flex-col items-center justify-end pb-12 px-6 text-center">
+          <h1 className="text-white text-5xl md:text-7xl font-serif font-bold drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
+            BrewMate
+          </h1>
+          <p className="text-white/90 mt-4 font-medium tracking-widest uppercase text-sm drop-shadow-md">
+            The Finest Craft Selection
+          </p>
+        </section>
+
+        {/* CONTENUTO SOLIDO */}
+        <div className="bg-brew-gold pt-10 pb-20 relative">
+          {/* Ombra interna per dare profondità al passaggio */}
+          <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-black/5 to-transparent pointer-events-none" />
+
+          <div className="max-w-md mx-auto space-y-12 px-4"></div>
+        </div>
+      </div>
+    </main>
   );
 }
