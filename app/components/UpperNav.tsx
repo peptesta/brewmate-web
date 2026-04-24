@@ -1,68 +1,116 @@
 "use client";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useState } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
 
 export default function UpperNav() {
   const { scrollY } = useScroll();
+  const [isOpen, setIsOpen] = useState(false);
 
-  // Trasformiamo lo scroll in opacità del background (da trasparente a un nero molto leggero/traslucido)
+  // Background dinamico che diventa opaco scrollando
   const backgroundColor = useTransform(
     scrollY,
     [0, 100],
-    ["rgba(26, 26, 27, 0)", "rgba(26, 26, 27, 0.4)"],
+    ["rgba(26, 26, 27, 0)", "#1A1A1B"], // Usa il tuo brew-stout
   );
 
   const backdropBlur = useTransform(
     scrollY,
     [0, 100],
-    ["blur(0px)", "blur(2px)"],
+    ["blur(0px)", "blur(12px)"],
   );
 
-  // Aggiungiamo anche un sottile bordo inferiore che appare solo quando si scende
-  const borderBottom = useTransform(
-    scrollY,
-    [0, 100],
-    ["1px solid rgba(255, 191, 0, 0)", "1px solid rgba(255, 191, 0, 0.2)"],
-  );
+  const menuItems = [
+    { name: "Discover", href: "#" },
+    { name: "Popular Brews", href: "#" },
+    { name: "Local Breweries", href: "#" },
+    { name: "Your Cellar", href: "#" },
+  ];
 
   return (
-    <motion.header
-      style={{
-        backgroundColor,
-        backdropFilter: backdropBlur,
-        WebkitBackdropFilter: backdropBlur, // Per compatibilità Safari
-      }}
-      className="text-white px-4 py-4 sticky top-0 z-50 transition-all duration-300"
-    >
-      <div className="max-w-md mx-auto flex flex-col items-center justify-center text-center">
-        {/* Parte superiore: Business/Small font */}
-        <motion.span
-          initial={{ opacity: 0, y: -5 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-[10px] uppercase tracking-[0.2em] font-sans font-semibold text-white/60 mb-0.5"
-        >
-          Thirsty? Looking for
-        </motion.span>
+    <>
+      <motion.header
+        style={{
+          backgroundColor,
+          backdropFilter: backdropBlur,
+          WebkitBackdropFilter: backdropBlur,
+        }}
+        className="text-white px-6 py-4 sticky top-0 z-[100]"
+      >
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          {/* LEFT: Branding */}
+          <div className="flex flex-col items-start leading-none">
+            <span className="text-[9px] uppercase tracking-[0.3em] font-sans font-bold text-white/50 mb-1">
+              Thirsty? Looking for
+            </span>
+            <h1 className="text-3xl font-serif font-bold text-brew-gold tracking-tight italic">
+              BrewMate
+            </h1>
+          </div>
 
-        {/* Brand Name: Fancy font */}
-        <motion.h1
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="text-5xl font-serif font-bold text-brew-gold tracking-wide italic"
-        >
-          BrewMate
-        </motion.h1>
-
-        {/* Elemento decorativo */}
-        <div className="w-12 h-[1px] bg-brew-gold/30 mt-2 rounded-full" />
-      </div>
-
-      {/* Profile pill (Nascondi su mobile se troppo ingombrante) */}
-      <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-2 bg-white/10 px-2 py-1 rounded-full border border-white/10">
-        <div className="w-6 h-6 rounded-full bg-brew-gold flex items-center justify-center">
-          <span className="text-brew-stout font-bold text-[10px]">MR</span>
+          {/* RIGHT: Hamburger Menu */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="z-[110] p-2 hover:bg-white/5 rounded-full transition-colors focus:outline-none"
+          >
+            <div className="w-6 h-5 flex flex-col justify-between items-end">
+              <span
+                className={`h-0.5 bg-brew-gold transition-all duration-300 ${isOpen ? "w-6 rotate-45 translate-y-2" : "w-6"}`}
+              />
+              <span
+                className={`h-0.5 bg-brew-gold transition-all duration-300 ${isOpen ? "opacity-0" : "w-4"}`}
+              />
+              <span
+                className={`h-0.5 bg-brew-gold transition-all duration-300 ${isOpen ? "w-6 -rotate-45 -translate-y-2" : "w-5"}`}
+              />
+            </div>
+          </button>
         </div>
-      </div>
-    </motion.header>
+      </motion.header>
+
+      {/* FULLSCREEN OVERLAY MENU */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[90] bg-brew-stout flex flex-col justify-center items-center p-12"
+          >
+            {/* Texture soft opzionale */}
+            <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('/image/beer-texture.jpg')] bg-cover" />
+
+            <nav className="relative z-10 flex flex-col gap-8 text-center">
+              {menuItems.map((item, i) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className="group flex flex-col items-center"
+                >
+                  <span className="text-brew-gold text-[10px] font-bold tracking-[0.4em] uppercase mb-2 opacity-0 group-hover:opacity-100 transition-all">
+                    0{i + 1}
+                  </span>
+                  <span className="text-white text-4xl md:text-6xl font-serif font-bold hover:italic hover:text-brew-gold transition-all">
+                    {item.name}
+                  </span>
+                </a>
+              ))}
+            </nav>
+
+            <div className="absolute bottom-12 flex flex-col items-center gap-4">
+              <div className="w-12 h-px bg-brew-gold/20" />
+              <p className="text-white/30 text-[10px] uppercase tracking-widest italic">
+                The Finest Craft Selection
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

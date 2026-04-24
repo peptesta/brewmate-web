@@ -3,7 +3,6 @@ import type { Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "./styles/animations.css";
-import BottomNav from "./components/BottomNav";
 import UpperNav from "./components/UpperNav";
 
 const geistSans = Geist({
@@ -39,7 +38,6 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <UpperNav />
         {children}
-        {/* <BottomNav /> */}
       </body>
     </html>
   );
