@@ -19,7 +19,7 @@ const PopularBeerCard = ({
     <div
       className={`group relative h-96 w-full overflow-hidden rounded-[2.5rem] 
       /* Effetto Glassmorphism */
-      bg-white/10 backdrop-blur-xl border border-white/20 
+      bg-white/10 backdrop-blur-xs border border-white/20 
       shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] 
       transition-all duration-500 hover:-translate-y-2 hover:border-brew-gold/50
       /* Centramento della card nel suo slot di griglia */
