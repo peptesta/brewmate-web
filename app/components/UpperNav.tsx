@@ -7,6 +7,7 @@ import {
   AnimatePresence,
 } from "framer-motion";
 
+import { Search, Beer, Pencil, PersonStanding } from "lucide-react";
 export default function UpperNav() {
   const { scrollY } = useScroll();
   const [isOpen, setIsOpen] = useState(false);
@@ -25,10 +26,14 @@ export default function UpperNav() {
   );
 
   const menuItems = [
-    { name: "Discover", href: "#" },
-    { name: "Popular Brews", href: "#" },
-    { name: "Local Breweries", href: "#" },
-    { name: "Your Cellar", href: "#" },
+    { name: "Discover", href: "#", icon: <Search className="w-6 h-6" /> },
+    { name: "Popular Brews", href: "#", icon: <Beer className="w-6 h-6" /> },
+    { name: "Beer Reviews", href: "#", icon: <Pencil className="w-6 h-6" /> },
+    {
+      name: "My Profile",
+      href: "#",
+      icon: <PersonStanding className="w-6 h-6" />,
+    },
   ];
 
   return (
@@ -95,9 +100,12 @@ export default function UpperNav() {
                   <span className="text-brew-gold text-[10px] font-bold tracking-[0.4em] uppercase mb-2 opacity-0 group-hover:opacity-100 transition-all">
                     0{i + 1}
                   </span>
-                  <span className="text-white text-4xl md:text-6xl font-serif font-bold hover:italic hover:text-brew-gold transition-all">
-                    {item.name}
-                  </span>
+                  <div className="flex items-center gap-4 text-white hover:text-brew-gold transition-all">
+                    {item.icon}
+                    <span className="text-4xl md:text-6xl font-serif font-bold group-hover:italic leading-none">
+                      {item.name}
+                    </span>
+                  </div>
                 </a>
               ))}
             </nav>
